@@ -91,8 +91,11 @@ class EasyTags(ui_extra_networks.ExtraNetworksPage):
 
         self.items = {x["name"]: x for x in self.list_items()}
 
-        for item in self.items.values():
+        #for item in self.items.values():
+            #items_html += self.create_html_for_item(item, tabname)
+        for key, item in self.items.items():
             items_html += self.create_html_for_item(item, tabname)
+
 
         if items_html == '':
             dirs = "".join([f"<li>{x}</li>" for x in self.allowed_directories_for_previews()])
