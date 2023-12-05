@@ -74,28 +74,25 @@ class EasyTags(ui_extra_networks.ExtraNetworksPage):
 
         return self.card_page.format(**args)
 
-    def create_html(self, tabname):
+    def create_html(self, tabname):  # Accepts only 'tabname'
         items_html = ''
-
-        subdirs = {}
-        for cat in self.allowed_directories_for_previews():
-            subdirs[cat] = 1
-
+        subdirs_html = ''
+        self.items = {x["name"]: x for x in self.list_items()}
+        subdirs = {cat: 1 for cat in self.allowed_directories_for_previews()}
         if subdirs:
             subdirs = {"": 1, **subdirs}
 
-        subdirs_html =  "".join([f"""
-                        <button class='lg secondary gradio-button custom-button{" search-all" if subdir=="" else ""}' onclick='extraNetworksSearchButton("{tabname}_extra_search", event)'>
-                        {html.escape(subdir if subdir!="" else "all")}
-                        </button>""" for subdir in subdirs])
+        for subdir in subdirs:
+            subdirs_html += f"""
+                <button class='lg secondary gradio-button custom-button{" search-all" if subdir == "" else ""}' 
+                        onclick='extraNetworksSearchButton("{tabname}_extra_search", event)'>
+                    {html.escape(subdir if subdir != "" else "all")}
+                </button>
+            """
 
-        self.items = {x["name"]: x for x in self.list_items()}
-
-        #for item in self.items.values():
-            #items_html += self.create_html_for_item(item, tabname)
-        for key, item in self.items.items():
+        for item_name in self.items:
+            item = self.items[item_name]
             items_html += self.create_html_for_item(item, tabname)
-
 
         if items_html == '':
             dirs = "".join([f"<li>{x}</li>" for x in self.allowed_directories_for_previews()])
@@ -103,14 +100,14 @@ class EasyTags(ui_extra_networks.ExtraNetworksPage):
 
         self_name_id = self.name.replace(" ", "_")
 
-        res =   f"""
-                <div id='{tabname}_{self_name_id}_subdirs' class='extra-network-subdirs extra-network-subdirs-cards'>
-                    {subdirs_html}
-                </div>
-                <div id='{tabname}_{self_name_id}_cards' class='extra-network-cards'>
-                    {items_html}
-                </div>
-                """
+        res = f"""
+            <div id='{tabname}_{self_name_id}_subdirs' class='extra-network-subdirs extra-network-subdirs-cards'>
+                {subdirs_html}
+            </div>
+            <div id='{tabname}_{self_name_id}_cards' class='extra-network-cards'>
+                {items_html}
+            </div>
+        """
 
         return res
 # ========== HTML STUFFS ==========
