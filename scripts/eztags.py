@@ -1,7 +1,12 @@
 ﻿from modules import shared, ui_extra_networks, script_callbacks
-from modules.ui_extra_networks import quote_js
+#from modules.ui_extra_networks import quote_js
 import scripts.yaml_utils as yaml_utils
 import html
+
+def quote_js(s):
+    s = s.replace('\\', '\\\\')
+    s = s.replace('"', '\\"')
+    return f'"{s}"'
 
 class EasyTags(ui_extra_networks.ExtraNetworksPage):
 
