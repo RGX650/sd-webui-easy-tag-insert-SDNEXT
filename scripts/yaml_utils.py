@@ -38,4 +38,5 @@ def reload_yaml():
             continue
 
         with open(TAGS_FOLDER.joinpath(FILE)) as stream:
-            TAGS = merge_dictionary(TAGS, yaml.safe_load(stream))
+            yaml = YAML(typ='safe', pure=True)
+            TAGS = merge_dictionary(TAGS, yaml.load(stream))
